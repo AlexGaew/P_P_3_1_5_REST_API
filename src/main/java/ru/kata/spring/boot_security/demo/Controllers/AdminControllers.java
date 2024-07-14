@@ -39,8 +39,15 @@ public class AdminControllers {
     }
 
     @GetMapping("/info")
-    public String printInfoAllUser(Model model) {
+    public String printInfoAllUser(Model model, Principal principal) {
         model.addAttribute("infoAllUsers", userService.getAllUsers());
+        Role role = userService.findUserByUsername(principal.getName()).getRoles().stream().findFirst().orElseThrow();
+        if (role.getRoles().contains("ROLE_ADMIN")) {
+            model.addAttribute("user", false);
+            model.addAttribute("role", role.getRoles());
+        } else {
+            model.addAttribute("user", true);
+        }
         return "user/userInfo";
     }
 
