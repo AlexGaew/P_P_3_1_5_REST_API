@@ -54,30 +54,29 @@
             <td><a th:href="@{/admin/user/{id}(id=${users.getId()})}"><h3 th:text="${users.getName()}"></h3></a></td>
             <td><h3 th:text="${users.getSurName()}"></h3></td>
             <td><h3 th:text="${users.getAge()}"></h3></td>
-            <td th:if="${!user}"><h3 th:text="${role}"></h3></td>
+            <td th:if="${!user}"><h3 th:text="${users.getRoles()}"></h3></td>
         </tr>
     </th:block>
 
-  <!--  <div th:if="${!user}">
-        <a th:href="@{/admin/user/{id}/edit(id=${userById.getId()})}"><h3>Edit user</h3></a>
-    </div> -->
 
 </table>
 <div>
     <a style="margin-right: auto" href="/admin/new"><h3 style="color: white">Create new User</h3></a>
 </div>
 
-<form th:method="DELETE" th:action="@{/admin/info}">
+<form th:method="DELETE" th:action="@{/admin}">
     <label for="userId">Enter User ID to delete:</label>
     <input type="number" id="userId" name="id" required>
     <button type="submit">Delete User</button>
 </form>
+
 <div>
     <form th:action="@{/logout}" th:method="POST">
         <input style="margin-right: auto" type="submit" value="Logout">
     </form>
 
 </div>
+
 
 
 </body>

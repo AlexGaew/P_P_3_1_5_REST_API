@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.util.ValidatorUser;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -23,24 +24,31 @@ import java.security.Principal;
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminControllers {
-    private final String REDIRECT_INFO = "redirect:/info";
+    private final String REDIRECT_INFO = "redirect:admin/info/";
 
-
+    private final ValidatorUser validator;
     private final UserService userService;
 
     @Autowired
-    public AdminControllers(UserService userService) {
+    public AdminControllers(UserService userService, ValidatorUser validator) {
         this.userService = userService;
+        this.validator = validator;
+    }
+
+    @GetMapping("")
+    public String startUserPage() {
+        return "admin/startAdminPage";
     }
 
 
     @GetMapping("/info")
     public String printInfoAllUser(Model model, Principal principal) {
         model.addAttribute("infoAllUsers", userService.getAllUsers());
+
         Role role = userService.findUserByUsername(principal.getName()).getRoles().stream().findFirst().orElseThrow();
         if (role.getRoles().contains("ROLE_ADMIN")) {
             model.addAttribute("user", false);
-            model.addAttribute("role", role.getRoles());
+
         } else {
             model.addAttribute("user", true);
         }
@@ -67,10 +75,11 @@ public class AdminControllers {
 
     @PostMapping()
     public String createUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
+
+        validator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
             return "admin/newUser";
         }
-        model.addAttribute("message", "User saved successfully");
         userService.saveUser(user);
         return REDIRECT_INFO;
     }
@@ -90,7 +99,7 @@ public class AdminControllers {
         return "redirect:/admin/user/" + user.getId();
     }
 
-    @DeleteMapping("/info")
+    @DeleteMapping()
     public String deleteUser(@RequestParam Long id) {
         userService.deleteUser(id);
         return REDIRECT_INFO;
