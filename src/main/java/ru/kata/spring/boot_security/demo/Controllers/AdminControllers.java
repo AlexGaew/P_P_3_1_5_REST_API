@@ -33,10 +33,6 @@ public class AdminControllers {
         this.userService = userService;
     }
 
-    @GetMapping()
-    public String printWelcome() {
-        return "admin";
-    }
 
     @GetMapping("/info")
     public String printInfoAllUser(Model model, Principal principal) {
@@ -48,7 +44,7 @@ public class AdminControllers {
         } else {
             model.addAttribute("user", true);
         }
-        return "user/userInfo";
+        return "admin/userInfo";
     }
 
     @GetMapping("/user/{id}")
@@ -60,19 +56,19 @@ public class AdminControllers {
         } else {
             model.addAttribute("user", true);
         }
-        return "user/userInfoById";
+        return "admin/userInfoById";
     }
 
     @GetMapping("/new")
     public String newUser(Model model, Principal principal) {
         model.addAttribute("user", userService.findUserByUsername(principal.getName()));
-        return "user/newUser";
+        return "admin/newUser";
     }
 
     @PostMapping()
     public String createUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "user/newUser";
+            return "admin/newUser";
         }
         model.addAttribute("message", "User saved successfully");
         userService.saveUser(user);
@@ -82,13 +78,13 @@ public class AdminControllers {
     @GetMapping("/user/{id}/edit")
     public String editUser(@PathVariable("id") long id, Model model) {
         model.addAttribute("user", userService.findUserById(id));
-        return "user/userEdit";
+        return "admin/userEdit";
     }
 
     @PatchMapping("/user/{id}")
     public String update(@Valid @ModelAttribute("user") User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "user/userEdit";
+            return "admin/userEdit";
         }
         userService.updateUser(user, user.getId());
         return "redirect:/admin/user/" + user.getId();

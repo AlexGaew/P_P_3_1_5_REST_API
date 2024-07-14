@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>User info</title>
+    <style>
+        body {
+            background-color: darkslategray;
+            color: white;
+            text-align: left;
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            background-color: darkslategray;
+            color: white;
+            text-align: left;
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            margin-left: 2cm;
+            margin-top: 2cm;
+            width: 60%;
+            text-align: center;
+        }
+
+        input {
+            margin-left: 3cm;
+            margin-top: 2cm;
+        }
+
+        button {
+            margin-left: 3cm;
+            margin-top: 1cm;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<table border="3">
+    <tr>
+        <th><h2>Id</h2></th>
+        <th><h2>Name</h2></th>
+        <th><h2>Surname</h2></th>
+        <th><h2>Age</h2></th>
+        <th><h2>Role</h2></th>
+    </tr>
+    <th:block th:each="users :${infoAllUsers}">
+        <tr>
+            <td><h3 th:text="${users.getId()}"></h3></td>
+            <td><a th:href="@{/admin/user/{id}(id=${users.getId()})}"><h3 th:text="${users.getName()}"></h3></a></td>
+            <td><h3 th:text="${users.getSurName()}"></h3></td>
+            <td><h3 th:text="${users.getAge()}"></h3></td>
+            <td th:if="${!user}"><h3 th:text="${role}"></h3></td>
+        </tr>
+    </th:block>
+
+  <!--  <div th:if="${!user}">
+        <a th:href="@{/admin/user/{id}/edit(id=${userById.getId()})}"><h3>Edit user</h3></a>
+    </div> -->
+
+</table>
+<div>
+    <a style="margin-right: auto" href="/admin/new"><h3 style="color: white">Create new User</h3></a>
+</div>
+
+<form th:method="DELETE" th:action="@{/admin/info}">
+    <label for="userId">Enter User ID to delete:</label>
+    <input type="number" id="userId" name="id" required>
+    <button type="submit">Delete User</button>
+</form>
+<div>
+    <form th:action="@{/logout}" th:method="POST">
+        <input style="margin-right: auto" type="submit" value="Logout">
+    </form>
+
+</div>
+
+
+</body>
+</html>

@@ -24,11 +24,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping()
-    public String printWelcome() {
-        return "user";
-    }
-
     @GetMapping("/info")
     public String printInfoUserById(Principal principal, Model model) {
         User user = userService.findUserByUsername(principal.getName());
