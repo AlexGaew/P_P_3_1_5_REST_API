@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            text-align: center;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+        }
+        .login-container form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            background-color: lightblue;
+            border: none;
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            max-width: 300px;
+        }
+        .login-container input[type="submit"] {
+            background-color: white;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h2>Авторизация</h2>
+    <form name="f"  action="/process_login" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" >
+
+        <input type="text" name="username" placeholder="Имя пользователя" required>
+        <input type="password" name="password" placeholder="Пароль" required>
+        </br>
+        <input type="submit" value="Войти">
+        <div th:if="${param.error}" style="color: red">
+            Неправильное имя или пароль
+        </div>
+    </form>
+</div>
+</body>
+</html>
