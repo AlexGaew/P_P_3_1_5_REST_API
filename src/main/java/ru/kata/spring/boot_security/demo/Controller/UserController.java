@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.Controllers;
+package ru.kata.spring.boot_security.demo.Controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +24,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("")
-    public String startUserPage() {
-        return "user/startUserPage";
-    }
 
     @GetMapping("/info")
     public String printInfoUserById(Principal principal, Model model) {

@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.Controllers;
+package ru.kata.spring.boot_security.demo.Controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +27,9 @@ public class AuthController {
         this.userService = userService;
     }
 
-
-    @GetMapping("/login")
-    public String auth() {
-        return "auth/login";
-    }
-
     @GetMapping("/registration")
     public String registrationPage(@ModelAttribute("user") User user) {
+
         return "auth/registration";
     }
 

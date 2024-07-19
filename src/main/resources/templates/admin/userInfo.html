@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>User info</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         body {
             background-color: darkslategray;
@@ -45,16 +46,22 @@
         <th><h2>Id</h2></th>
         <th><h2>Name</h2></th>
         <th><h2>Surname</h2></th>
+        <th><h2>Email</h2></th>
         <th><h2>Age</h2></th>
         <th><h2>Role</h2></th>
     </tr>
-    <th:block th:each="users :${infoAllUsers}">
-        <tr>
+    <th:block th:each="users, iter :${userList}">
+        <tr >
             <td><h3 th:text="${users.getId()}"></h3></td>
             <td><a th:href="@{/admin/user/{id}(id=${users.getId()})}"><h3 th:text="${users.getName()}"></h3></a></td>
             <td><h3 th:text="${users.getSurName()}"></h3></td>
+            <td><h3 th:text="${users.getEmail()}"></h3></td>
             <td><h3 th:text="${users.getAge()}"></h3></td>
-            <td th:if="${!user}"><h3 th:text="${users.getRoles()}"></h3></td>
+            <td>
+                <span th:each="role : ${users.getRoles()}"
+                      th:text="${#strings.substring(role.getRoles(), 5).replace(']', ' ') + ' '}"  >roles </span>
+
+            </td>
         </tr>
     </th:block>
 

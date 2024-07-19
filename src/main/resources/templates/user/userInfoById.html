@@ -37,6 +37,7 @@
         <th><h2>Id</h2></th>
         <th><h2>Name</h2></th>
         <th><h2>Surname</h2></th>
+        <th><h2>Email</h2></th>
         <th><h2>Age</h2></th>
     </tr>
     <th:block th:if="${userById}">
@@ -45,6 +46,7 @@
             <td><h3 th:text="${userById.getId()}"></h3></td>
             <td><h3 th:text="${userById.getName()}"></h3></td>
             <td><h3 th:text="${userById.getSurName()}"></h3></td>
+            <td><h3 th:text="${userById.getEmail()}"></h3></td>
             <td><h3 th:text="${userById.getAge()}"></h3></td>
         </tr>
 
@@ -63,12 +65,6 @@
     </form>
 
 </div>
-
-
-<!--
-<form th:method="DELETE" th:action="@{/user/{id}(id=${userInfo.getId()})}" th:object="${userInfo}">
-    <input type="submit" value="DELETE"/>
-</form> -->
 
 
 

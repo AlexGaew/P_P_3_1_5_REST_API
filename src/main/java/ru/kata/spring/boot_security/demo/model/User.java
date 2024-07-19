@@ -3,8 +3,9 @@ package ru.kata.spring.boot_security.demo.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Column;
@@ -17,16 +18,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Setter
 @Getter
+@ToString
 @Entity
 @Table(name = "t_users")
 public class User implements UserDetails {
@@ -36,23 +37,30 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
+    @Column(unique = true)
     @NotEmpty(message = "Name should not be empty")
     @Size(min = 2, max = 15, message = "Name should be between 2 and 15 characters")
     @Pattern(regexp = "^[a-zA-Z]+$", message = "Name must contain only letters")
     private String name;
 
-    @Column()
+
     @NotEmpty(message = "surName should not be empty")
     @Size(min = 2, max = 15, message = "surName should be between 2 and 15 characters")
     @Pattern(regexp = "^[a-zA-Z]+$", message = "surName must contain only letters")
     private String surName;
+
+    @Column(unique = true)
+    @NotEmpty(message = "Empty values not allowed")
+    @Email(message = "Not correct email entered")
+    private String email;
 
     @Column()
     @Min(value = 1, message = "Age  should not be greater 1")
     private int age;
 
     @Column
+    @NotEmpty(message = "Empty values not allowed")
+    @Size(min = 3, max = 256, message = "Password should be between 3 and 8 character")
     private String password;
 
 
@@ -71,6 +79,13 @@ public class User implements UserDetails {
         this.age = age;
         this.password = password;
     }
+
+    public User(String name, String password, Collection<Role> roles) {
+        this.name = name;
+        this.password = password;
+        this.roles = roles;
+    }
+
 
     public User() {
     }
@@ -108,20 +123,10 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRoles()))
-                .collect(Collectors.toList());
+        return roles;
+
 
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surName='" + surName + '\'' +
-                ", age=" + age +
-                ", roles=" + roles +
-                '}';
-    }
+
 }
