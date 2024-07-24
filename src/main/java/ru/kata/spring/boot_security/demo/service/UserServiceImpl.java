@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
-
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
@@ -27,15 +26,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserByUsername(String username) {
-        return userRepository.findByName(username).orElseThrow();
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException(String.format("User is %s not found", email)));
     }
 
 
     @Override
-    public User findUserById(long id) {
+    public User findUserById(int id) {
         Optional<User> user = userRepository.findById(id);
-        return user.orElse(new User());
+        return user.orElseThrow(() -> new EntityNotFoundException(String.format("User is %s not found", id)));
     }
 
     @Override
@@ -55,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateUser(User user, long id) {
+    public void updateUser(User user, int id) {
         if (userRepository.existsById(id)) {
             user.setId(id);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -66,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public boolean deleteUser(long userId) {
+    public boolean deleteUser(int userId) {
         if (userRepository.findById(userId).isPresent()) {
             userRepository.deleteById(userId);
             return true;

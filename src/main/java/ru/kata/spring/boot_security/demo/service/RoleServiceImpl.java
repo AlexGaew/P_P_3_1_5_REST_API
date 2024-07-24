@@ -4,8 +4,9 @@ import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import org.springframework.transaction.annotation.Transactional;
-
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,7 +26,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role findRoleById(long id) {
-        return roleRepository.getById(id);
+        Optional<Role> role = roleRepository.findById(id);
+        return role.orElseThrow(() -> new EntityNotFoundException("Role not found"));
     }
 
     @Override
@@ -43,6 +45,11 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public void deleteRole(long id) {
-        roleRepository.getById(id);
+        if (roleRepository.findById(id).isPresent()) {
+            roleRepository.deleteById(id);
+
+        }
+        throw new EntityNotFoundException("Role not found with id " + id);
     }
+
 }

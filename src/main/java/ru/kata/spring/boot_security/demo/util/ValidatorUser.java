@@ -7,18 +7,15 @@ import org.springframework.validation.Validator;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
-import java.security.Principal;
 
 @Component
-public class ValidatorUser implements Validator
-{
+public class ValidatorUser implements Validator {
     private final UserServiceImpl userService;
 
     @Autowired
-    public ValidatorUser(UserServiceImpl userService){
+    public ValidatorUser(UserServiceImpl userService) {
         this.userService = userService;
     }
-
 
 
     @Override
@@ -30,12 +27,12 @@ public class ValidatorUser implements Validator
     public void validate(Object target, Errors errors) {
         User user = (User) target;
         try {
-            userService.findUserByUsername(user.getName());
+            userService.findUserByEmail(user.getEmail());
         } catch (Exception e) {
             return;
         }
 
-        errors.rejectValue("name", null, "Пользовтаель с таким именем уже существует");
+        errors.rejectValue("email", null, "Пользовтаель с таким email уже существует");
 
     }
 }

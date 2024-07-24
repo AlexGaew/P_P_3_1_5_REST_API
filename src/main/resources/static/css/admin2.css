@@ -1,0 +1,154 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+}
+.navbar {
+    background-color: #343a40;
+    z-index: 1;
+    position: relative;
+}
+
+.navbar-text {
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    padding-left: 1rem;
+}
+
+.navbar .navbar-text span {
+    font-size: 1rem;
+    color: #fff;
+}
+
+.navbar .navbar-text .email {
+    font-weight: bold;
+    color: #f8f9fa;
+}
+
+.navbar .navbar-text .roles {
+    font-weight: normal;
+    color: #adb5bd;
+}
+
+.logout-btn {
+    border: none;
+    background: none;
+    color: #adb5bd;
+    padding: 0;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    color: #ffffff;
+}
+
+
+
+.sidebar {
+    float: left;
+    width: 237px;
+    height: 100vh;
+
+    top: 0;
+    left: 0;
+    background-color: white;
+    padding-top: 59px;
+}
+
+.sidebar a {
+    padding: 18px;
+    text-decoration: none;
+    font-size: 25px;
+    font-weight: bold;
+
+    display: block;
+    color: blue;
+
+    margin: 10px 0;
+}
+.sidebar a:hover {
+    background-color: blue;
+    color: white;
+}
+
+.content {
+    background-color: #f2f5f7;
+    height: 821px;
+    margin-left: 250px;
+    padding: 20px;
+}
+
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+
+form label {
+    display: block;
+    margin-top: 10px;
+}
+
+form input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    box-sizing: border-box;
+}
+.tabs {
+    width: 100%;
+    padding: 7px;
+    margin: 0 auto;
+    background-color: white;
+}
+.tabs > input {
+    display: none;
+}
+.tabs > div {
+    display: none;
+    padding: 12px;
+    border: 1px solid #c0c0c0;
+    background-color: rgb(255, 255, 255, 0%);
+}
+.tabs > label {
+    display: inline-block;
+    padding: 7px;
+    margin: 0 -5px -1px 0;
+    text-align: center;
+    color: blue;
+
+    cursor: pointer;
+}
+.tabs > input:checked + label {
+    color: #473333;
+    border: 1px solid #c0c0c0;
+    border-bottom: 1px solid #ffffff;
+    background: white;
+}
+
+#tab_1:checked ~ #info-user-container,
+#tab_2:checked ~ #registration-container {
+    display: block;
+}
+.table-active {
+    font-weight: bold;
+}
+.form-registration {
+    width: 300px;
+    margin-left: 600px;
+    height: 580px;
+}
+.form-select {
+    height: 50px; /* Установите нужную высоту */
+    padding: 5px; /* Настройка внутреннего отступа */
+    font-size: 14px; /* Настройка размера шрифта */
+}
+
+.mb-3 {
+    font-weight: bold;
+    height: 68px;
+}
+
+
