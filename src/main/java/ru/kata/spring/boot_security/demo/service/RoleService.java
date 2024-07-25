@@ -12,11 +12,4 @@ public interface RoleService {
     Role findRoleById(long id);
 
 
-    void saveRole(Role role);
-
-
-    void updateUser(Role role, long id);
-
-
-    void deleteRole(long id);
 }

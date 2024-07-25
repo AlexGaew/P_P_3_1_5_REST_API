@@ -27,7 +27,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException(String.format("User is %s not found", email)));
+        return userRepository.findByEmail(email).orElseThrow(() ->
+                new EntityNotFoundException(String.format("User is %s not found", email)));
     }
 
 
@@ -59,7 +60,7 @@ public class UserServiceImpl implements UserService {
             user.setId(id);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
-        } else throw new EntityNotFoundException("User with id " + id + " not found");
+        } else throw new EntityNotFoundException(String.format("User is %s not found", id));
 
     }
 

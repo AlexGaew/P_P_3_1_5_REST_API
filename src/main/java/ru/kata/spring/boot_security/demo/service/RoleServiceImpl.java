@@ -30,26 +30,5 @@ public class RoleServiceImpl implements RoleService {
         return role.orElseThrow(() -> new EntityNotFoundException("Role not found"));
     }
 
-    @Override
-    @Transactional
-    public void saveRole(Role role) {
-
-    }
-
-    @Override
-    @Transactional
-    public void updateUser(Role role, long id) {
-
-    }
-
-    @Override
-    @Transactional
-    public void deleteRole(long id) {
-        if (roleRepository.findById(id).isPresent()) {
-            roleRepository.deleteById(id);
-
-        }
-        throw new EntityNotFoundException("Role not found with id " + id);
-    }
 
 }
