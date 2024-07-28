@@ -13,14 +13,12 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.util.ValidatorUser;
 
 import javax.validation.Valid;
-import java.util.HashSet;
 import java.util.Objects;
 
 @Controller
@@ -50,15 +48,9 @@ public class AdminControllers {
     }
 
     @PatchMapping(value = "/update")
-    public String update(@Valid @ModelAttribute("user") User user, @RequestParam("selectedRoles") int[] rolesId,
-                         BindingResult bindingResult) {
+    public String update(@Valid @ModelAttribute("user") User user, @RequestParam("selectedRoles") int[] rolesId) {
 
-        HashSet<Role> roles = new HashSet<>();
-        for (int roleId : rolesId) {
-            roles.add(roleService.findRoleById(roleId));
-        }
-        user.setRoles(roles);
-        userService.updateUser(user, user.getId());
+        userService.updateUser(user, rolesId);
         return REDIRECTADMIN;
     }
 
@@ -67,18 +59,16 @@ public class AdminControllers {
     public String createUser(@Valid @ModelAttribute("user") User user, Model model,
                              @RequestParam("rolesSelected") int[] rolesId, BindingResult bindingResult) {
 
-        HashSet<Role> roles = new HashSet<>();
-        for (int roleId : rolesId) {
-            roles.add(roleService.findRoleById(roleId));
-        }
 
         validator.validate(user, bindingResult);
         if (bindingResult.hasErrors()) {
-            model.addAttribute("errorMessage", Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
+            model.addAttribute("errorMessage", Objects.requireNonNull(bindingResult
+                            .getFieldError())
+                    .getDefaultMessage());
             return "error/error";
         }
-        user.setRoles(roles);
-        userService.saveUser(user);
+
+        userService.saveUser(user, rolesId);
         return REDIRECTADMIN;
     }
 
