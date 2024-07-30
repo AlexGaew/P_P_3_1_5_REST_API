@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -23,6 +24,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -69,24 +72,34 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Collection<Role> roles;
+    private Set<Role> roles;
 
 
-    public User(String name, String surName, int age, String password) {
+    public User(String name, String surName, String email, int age, String password, Set<Role> roles) {
         this.name = name;
         this.surName = surName;
+        this.email = email;
         this.age = age;
-        this.password = password;
-    }
-
-    public User(String name, String password, Collection<Role> roles) {
-        this.name = name;
         this.password = password;
         this.roles = roles;
     }
 
+    public User(String name, String surName, String email, int age, String password) {
+        this.name = name;
+        this.surName = surName;
+        this.email = email;
+        this.age = age;
+        this.password = password;
+    }
 
     public User() {
+    }
+
+    public String getRolesToString() {
+        return getRoles().stream()
+                .map(role -> role.getRoles().substring(5))
+                .sorted()
+                .collect(Collectors.joining(" ,"));
     }
 
     @Override
@@ -95,37 +108,53 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return getName();
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }
 
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
-
-
     }
+
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+//                ", lastName='" + surName + '\'' +
+//                ", email='" + email + '\'' +
+//                ", password='" + password + '\'' +
+//                ", roles=" + getRolesToString() +
+//                '}';
+//    }
 
 
 }

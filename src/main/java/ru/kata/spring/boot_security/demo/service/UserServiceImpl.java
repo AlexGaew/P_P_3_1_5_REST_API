@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
@@ -52,11 +51,11 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void saveUser(User user, int[] rolesId) {
-
+    public void saveUser(User user) {
         HashSet<Role> roles = new HashSet<>();
-        for (int roleId : rolesId) {
-            roles.add(roleService.findRoleById(roleId));
+        for (Role role : user.getRoles()) {
+
+            roles.add(roleService.findRoleById(role.getId()));
         }
         user.setRoles(roles);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -67,17 +66,17 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateUser(User user, int[] roleId) {
+    public void updateUser(User user) {
 
         HashSet<Role> roles = new HashSet<>();
-        for (int role : roleId) {
-            roles.add(roleService.findRoleById(role));
+        for (Role role : user.getRoles()) {
+
+            roles.add(roleService.findRoleById(role.getId()));
         }
-
-
+        user.setRoles(roles);
         if (userRepository.existsById(user.getId())) {
             user.setId(user.getId());
-            user.setRoles(roles);
+
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
         } else throw new EntityNotFoundException(String.format("User is %s not found", user.getId()));

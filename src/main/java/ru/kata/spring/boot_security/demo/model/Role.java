@@ -3,7 +3,6 @@ package ru.kata.spring.boot_security.demo.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Column;
@@ -14,7 +13,6 @@ import javax.persistence.Id;
 
 @Getter
 @Setter
-@ToString
 @Entity(name = "t_roles")
 public class Role implements GrantedAuthority {
 
@@ -34,13 +32,15 @@ public class Role implements GrantedAuthority {
 
     }
 
-
     public Role() {
     }
-
 
     @Override
     public String getAuthority() {
         return roles;
+    }
+
+    public String toString() {
+        return "Role(id=" + this.getId() + ", roles=" + this.getRoles() + ")";
     }
 }

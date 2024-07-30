@@ -27,32 +27,33 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-
     // Configure Spring Security and Authorisation
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http
-                .cors()
-                .and()
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/admin/**, /api/**").hasRole("ADMIN")
+//                .anyRequest().permitAll()
+                .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/user").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/", "/auth/**",  "/error", "/css/**", "/js/**").permitAll()
+                .antMatchers("/login", "/error").anonymous()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/auth/login")
-                .loginProcessingUrl("/process_login")
-                .defaultSuccessUrl("/", true)
+                .loginPage("/")
+                .permitAll()
                 .successHandler(successUserHandler)
-                .failureUrl("/auth/login?error")
+                .loginProcessingUrl("/login")
+                .failureUrl("/login?error")
                 .and()
-                .logout().logoutUrl("/logout").logoutSuccessUrl("/auth/login");
+                .logout().logoutUrl("/logout").logoutSuccessUrl("/");
+
 
     }
-// Так добавляем папки с css и др...!!!!!!!
+
+    // Так добавляем папки с css и др...!!!!!!!
     @Override
     public void configure(WebSecurity web) {
         web.ignoring()

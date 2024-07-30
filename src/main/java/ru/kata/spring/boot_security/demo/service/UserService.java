@@ -14,10 +14,10 @@ public interface UserService {
     User findUserById(int id);
 
 
-    void saveUser(User user, int[] id);
+    void saveUser(User user);
 
 
-    void updateUser(User user, int[] id);
+    void updateUser(User user);
 
 
     boolean deleteUser(int id);
