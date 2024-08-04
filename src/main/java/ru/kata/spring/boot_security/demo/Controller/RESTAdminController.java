@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
@@ -27,18 +26,14 @@ import java.util.List;
 public class RESTAdminController {
 
     private final UserService userService;
-    private final RoleService roleService;
 
     @Autowired
-    public RESTAdminController(UserService userService,
-                               RoleService roleService) {
+    public RESTAdminController(UserService userService) {
         this.userService = userService;
-        this.roleService = roleService;
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> printInfoUserById(@PathVariable("id") Integer id) {
-
+    public ResponseEntity<User> printInfoUserById(@Valid @PathVariable("id") Integer id) {
         return ResponseEntity.ok(userService.findUserById(id));
     }
 
@@ -48,34 +43,22 @@ public class RESTAdminController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         userService.saveUser(user);
-        return ResponseEntity.ok(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PatchMapping("/users")
-    public ResponseEntity<User> updateUser(@Valid @RequestBody User user, BindingResult bindingResult) {
+    public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
 
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         userService.updateUser(user);
-        return ResponseEntity.ok(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable Integer id) {
-        User user = userService.findUserById(id);
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
         userService.deleteUser(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(userService.findUserById(id), HttpStatus.OK);
     }
 
 

@@ -1,18 +1,25 @@
 package ru.kata.spring.boot_security.demo.Controller;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
+import ru.kata.spring.boot_security.demo.error.Error;
+import ru.kata.spring.boot_security.demo.exeption.MyException;
 
-import javax.persistence.EntityNotFoundException;
-
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    private ModelAndView handleException(Exception ex) {
-        ModelAndView modelAndView = new ModelAndView("/error");
-        modelAndView.addObject("errorMessage", ex.getMessage());
-        return modelAndView;
+
+    @ExceptionHandler(MyException.class)
+    public ResponseEntity<Error> myGlobalException(MyException e) {
+        log.error("internal server error: {}", e.toString());
+        return new ResponseEntity<>(Error.builder()
+                .message(e.getMessage())
+                .code(e.getCode())
+                .build(),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
